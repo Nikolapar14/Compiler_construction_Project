@@ -1,0 +1,335 @@
+package rs.ac.bg.etf.pp1;
+
+import java_cup.runtime.*;
+import org.apache.log4j.*;
+import rs.ac.bg.etf.pp1.ast.*;
+
+parser code {:
+
+	boolean errorDetected;
+	
+	Logger log = Logger.getLogger(getClass());
+   
+   
+    // slede redefinisani metodi za prijavu gresaka radi izmene teksta poruke
+     
+    public void report_fatal_error(String message, Object info) throws java.lang.Exception {
+      done_parsing();
+      report_error(message, info);
+    }
+  
+    public void syntax_error(Symbol cur_token) {
+        report_error("\nSintaksna greska", cur_token);
+    }
+  
+    public void unrecovered_syntax_error(Symbol cur_token) throws java.lang.Exception {
+        report_fatal_error("Fatalna greska, parsiranje se ne moze nastaviti", cur_token);
+    }
+
+    public void report_error(String message, Object info) {
+    	errorDetected = true;
+    	StringBuilder msg = new StringBuilder(message); 
+    	if (info instanceof Symbol)
+            msg.append (" na liniji ").append(((Symbol)info).left);
+        log.error(msg.toString());
+    }
+
+
+:}
+
+init with {:
+	errorDetected = false;
+:}
+
+scan with {:
+	Symbol s = this.getScanner().next_token();
+	if (s != null && s.value != null) 
+		log.info(s.toString() + " " + s.value.toString());
+	return s;
+:}
+
+terminal PROG, BREAK, CLASS, ELSE, CONST, IF, NEW, PRINT, READ, RETURN, EXTENDS, CONTINUE;
+terminal FOR, STATIC, NAMESPACE, PLUS, MINUS;
+terminal MUL, DIV, MOD, IS_EQUAL, NOT_EQUAL, GREATER, GREATER_EQUAL, LESS, LESS_EQUAL;
+terminal AND, OR, EQUAL_SIGN, PLUS_PLUS, MINUS_MINUS, SEMI, COLON, COMMA, DOT, LPAREN, RPAREN;
+terminal LBRACKET, RBRACKET, LBRACE, RBRACE, POINT, VOID, DOUBLE_COLON, TRUE, FALSE;
+terminal  UNION, DO, WHILE, MAP, INTERFACE;
+
+terminal Boolean BOOL_CONST;
+terminal Integer NUMBER_CONST;
+terminal String IDENT;
+
+terminal Character CHAR_CONST;
+
+nonterminal  VarDeclList, MethodDeclList, ConstDecl;  
+nonterminal  AnotherConstList, VarDecl, BracketsList, AnotherVarList;  
+
+nonterminal  MethodTypeList, FormParsList, VarDeclarationList;  
+nonterminal StatementList, FormPars, AnotherFormParamList, Statement;  
+
+nonterminal  ExprList, DesignatorStatement;  
+nonterminal ActualPars, ActPars, AnotherExprList, Condition, OrCondList;  
+
+nonterminal CondTerm, AndCondList, CondFact, RelopExprList;  
+nonterminal  FactorNewList;  
+
+nonterminal   Label, Assignop, Relop;  
+nonterminal Addop, Mulop, Setop, FirstVar, FirstConst;  
+
+nonterminal rs.etf.pp1.symboltable.concepts.Obj  Designator,DesignatorArray,ProgName, Program, MethodDecl,MethodSignature,AnotherNumConstList;
+nonterminal rs.etf.pp1.symboltable.concepts.Struct Type, ConstValueList, DesignatorStatementList,Factor, Term, Expr, Express ;
+
+
+Program ::= (Program) PROG ProgName:p VarDeclList LBRACE MethodDeclList RBRACE;
+
+ProgName ::= (ProgName) IDENT:progName;
+
+VarDeclList ::= (VarDeclarationConst) VarDeclList ConstDecl
+			|
+			(VarDeclaration) VarDeclList VarDecl
+			|
+			(NoDecl) /* epsilon */
+			;
+			
+MethodDeclList ::= (Methods) MethodDeclList MethodDecl
+				|
+				(NoMethod) /* epsilon */
+				;
+		
+		
+ConstDecl ::= (ConstDecl) FirstConst:first  AnotherConstList SEMI;
+
+FirstConst ::= (FirstConst) CONST Type:constType IDENT:constName EQUAL_SIGN ConstValueList:constValue;
+
+ConstValueList ::= (NumberConst) NUMBER_CONST
+				|
+				(CharConst) CHAR_CONST
+				|
+				(BoolTrue) TRUE
+				|
+				(BoolFalse) FALSE
+				;
+				
+AnotherConstList ::= (AnotherConsts) AnotherConstList COMMA IDENT:constName EQUAL_SIGN ConstValueList
+					|
+					(NoAnotherConst) /* epsilon */
+					;
+					
+
+VarDecl ::= (VarDecl) FirstVar:first AnotherVarList SEMI;
+
+FirstVar ::= (FirstVar) Type:varType IDENT:varName BracketsList;
+
+BracketsList ::= (Brackets) LBRACKET RBRACKET
+				|
+				(NoBrackets) /* epsilon */
+				;
+
+
+AnotherVarList ::= (AnotherVars) AnotherVarList COMMA IDENT:anotherVar BracketsList
+				|
+				(NoAnotherVars) /* epsilon */
+				;
+				
+MethodSignature ::= (MethodSignature) MethodTypeList IDENT:methName LPAREN FormParsList RPAREN;
+
+
+MethodTypeList ::= (MethodType) Type:retType
+				|
+				(VoidMethod) VOID:voidType
+				;
+				
+				
+FormParsList ::= (MethodWithParameters) FormPars
+				|
+				(MethodWithoutParameters) /* epsilon */
+				;
+				
+				
+MethodDecl ::= (MethodDecl)  MethodSignature VarDeclarationList LBRACE StatementList RBRACE;
+ 
+
+VarDeclarationList ::= (VarDeclarations) VarDeclarationList VarDecl
+					|
+					(NoDeclarations) /* epsilon */
+					;
+					
+
+StatementList ::= (Statements) StatementList Statement
+				|
+				(NoStatements) /* epsilon */
+				;
+				
+FormPars ::= (FormPars) Type IDENT BracketsList AnotherFormParamList ;
+
+AnotherFormParamList ::= (AnotherParameter) AnotherFormParamList COMMA Type IDENT BracketsList
+						|
+						(NoAnotherParameter) /* epsilon */
+						;
+						
+						
+Type ::= (Type) IDENT:typeName;
+
+
+
+Statement ::= (StatementDesignator) DesignatorStatement SEMI
+            |
+            (StatementBreak) BREAK SEMI
+            |
+            (StatementContinue) CONTINUE SEMI
+            |
+            (StatementReturn) RETURN ExprList SEMI
+            |
+            (StatementRead) READ LPAREN Designator RPAREN SEMI
+            |
+            (StatementPrint) PRINT LPAREN Expr AnotherNumConstList RPAREN SEMI
+            |
+            (StatementStat) LBRACE StatementList RBRACE
+            ;
+
+
+
+
+				
+ExprList ::= (Expression) Expr
+			|
+			(NoExpression) /* epsilon */
+			;
+			
+AnotherNumConstList ::= (AnotherNumConst) COMMA NUMBER_CONST:num
+					|
+					(NoNumConst) /* epsilon */
+					;
+					
+
+DesignatorStatement ::= (DesignatorStat) Designator DesignatorStatementList
+					|
+					(DesignatorStatementUnion) Designator:d1 Assignop Designator:d2 Setop Designator:d3;
+
+DesignatorStatementList ::= (DesignatorStatementAssignop) Assignop Expr
+						|
+						(DesignatorStatementActPars) LPAREN ActualPars RPAREN
+						|
+						(DesignatorStatementPlusPlus) PLUS_PLUS
+						|
+						(DesignatorStatementMinusMinus) MINUS_MINUS
+						;			
+
+ActualPars ::= (ActualParameters) ActPars
+			|
+			(NoActualParameters) /* epsilon */
+			;
+			
+			
+ActPars ::= (ActPars) Expr AnotherExprList;
+
+AnotherExprList ::= (AnotherExpr) AnotherExprList COMMA Expr
+				|
+				(NoAnotherExpr) /* epsilon */
+				;
+				
+				
+Condition ::= (Condition) CondTerm OrCondList;
+
+OrCondList ::= (OrCond) OrCondList OR CondTerm
+			|
+			(NoOrCond) /* epsilon */
+			;
+			
+CondTerm ::= (CondTerm) CondFact AndCondList;
+
+AndCondList ::= (AndCond) AndCondList AND CondFact
+			|
+			(NoAndCond) /* epsilon */
+			;
+			
+CondFact ::= (CondFact) Expr RelopExprList;
+
+RelopExprList ::= (RelopExpr) Relop Expr
+				|
+				(NoRelopExpr) /* epsilon */
+				;
+				
+Expr ::= (ExprWithDash) MINUS Express
+		|
+		(ExprWithoutDash) Express
+		;
+		
+Express ::= (AddExpr) Express Addop Term
+     	 |
+     	 (TermExpr) Term
+	 	 ;
+	 	 
+Term ::= (TermList) Term Mulop Factor
+		 |
+		 (TermFactor) Factor
+		 ;
+					
+Factor ::= (FactorDesignator) Designator:d
+		|
+		(FactorDesignatorFunc) Designator:func LPAREN ActualPars RPAREN
+		|
+		(FactorNumber) NUMBER_CONST:num
+		|
+		(FactorChar) CHAR_CONST
+		|
+		(FactorTrue) TRUE
+		|
+		(FactorFalse) FALSE
+		|
+		(FactorNew) NEW Type FactorNewList
+		|
+		(FactorExpr) LPAREN Expr RPAREN
+		;
+		
+FactorNewList ::= (FactorNewExpr) LBRACKET Expr RBRACKET
+				|
+				(FactorNewActPars) LPAREN ActualPars RPAREN
+				;
+				
+		
+
+			
+			
+Designator ::= (DesignatorSingle) IDENT:name
+			|
+			(ExprDesignator) DesignatorArray LBRACKET Expr RBRACKET
+			;
+			
+DesignatorArray ::= (DesignatorArray) IDENT:name;
+
+
+				
+Label ::= (Label) IDENT;
+
+Assignop ::= (Assignop) EQUAL_SIGN;
+
+Relop ::= (RelopIsEqual) IS_EQUAL
+		|
+		(RelopNotEqual) NOT_EQUAL
+		|
+		(RelopGreater) GREATER
+		|
+		(RelopGreaterEqual) GREATER_EQUAL
+		|
+		(RelopLess) LESS
+		|
+		(RelopLessEqual) LESS_EQUAL
+		;
+		
+Addop ::= (AddopPlus) PLUS
+		|
+		(AddopMinus) MINUS
+		;
+		
+Mulop ::= (MulopMul) MUL
+		|
+		(MulopDiv) DIV
+		|
+		(MulopMod) MOD
+		;
+		
+Setop ::= (Setop) UNION;
+
+
+				
