@@ -1,13 +1,13 @@
 // generated with ast extension for cup
 // version 0.8
-// 5/9/2025 13:26:36
+// 5/9/2025 17:42:57
 
 
 package rs.ac.bg.etf.pp1.ast;
 
-public class NoAnotherVars extends AnotherVarList {
+public class NoRemainingVars extends RemainingVarsList {
 
-    public NoAnotherVars () {
+    public NoRemainingVars () {
     }
 
     public void accept(Visitor visitor) {
@@ -28,10 +28,10 @@ public class NoAnotherVars extends AnotherVarList {
     public String toString(String tab) {
         StringBuffer buffer=new StringBuffer();
         buffer.append(tab);
-        buffer.append("NoAnotherVars(\n");
+        buffer.append("NoRemainingVars(\n");
 
         buffer.append(tab);
-        buffer.append(") [NoAnotherVars]");
+        buffer.append(") [NoRemainingVars]");
         return buffer.toString();
     }
 }

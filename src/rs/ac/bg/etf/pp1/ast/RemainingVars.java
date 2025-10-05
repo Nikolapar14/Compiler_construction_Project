@@ -1,38 +1,38 @@
 // generated with ast extension for cup
 // version 0.8
-// 5/9/2025 13:26:36
+// 5/9/2025 17:42:57
 
 
 package rs.ac.bg.etf.pp1.ast;
 
-public class AnotherVars extends AnotherVarList {
+public class RemainingVars extends RemainingVarsList {
 
-    private AnotherVarList AnotherVarList;
-    private String anotherVar;
+    private RemainingVarsList RemainingVarsList;
+    private String remainingVar;
     private BracketsList BracketsList;
 
-    public AnotherVars (AnotherVarList AnotherVarList, String anotherVar, BracketsList BracketsList) {
-        this.AnotherVarList=AnotherVarList;
-        if(AnotherVarList!=null) AnotherVarList.setParent(this);
-        this.anotherVar=anotherVar;
+    public RemainingVars (RemainingVarsList RemainingVarsList, String remainingVar, BracketsList BracketsList) {
+        this.RemainingVarsList=RemainingVarsList;
+        if(RemainingVarsList!=null) RemainingVarsList.setParent(this);
+        this.remainingVar=remainingVar;
         this.BracketsList=BracketsList;
         if(BracketsList!=null) BracketsList.setParent(this);
     }
 
-    public AnotherVarList getAnotherVarList() {
-        return AnotherVarList;
+    public RemainingVarsList getRemainingVarsList() {
+        return RemainingVarsList;
     }
 
-    public void setAnotherVarList(AnotherVarList AnotherVarList) {
-        this.AnotherVarList=AnotherVarList;
+    public void setRemainingVarsList(RemainingVarsList RemainingVarsList) {
+        this.RemainingVarsList=RemainingVarsList;
     }
 
-    public String getAnotherVar() {
-        return anotherVar;
+    public String getRemainingVar() {
+        return remainingVar;
     }
 
-    public void setAnotherVar(String anotherVar) {
-        this.anotherVar=anotherVar;
+    public void setRemainingVar(String remainingVar) {
+        this.remainingVar=remainingVar;
     }
 
     public BracketsList getBracketsList() {
@@ -48,18 +48,18 @@ public class AnotherVars extends AnotherVarList {
     }
 
     public void childrenAccept(Visitor visitor) {
-        if(AnotherVarList!=null) AnotherVarList.accept(visitor);
+        if(RemainingVarsList!=null) RemainingVarsList.accept(visitor);
         if(BracketsList!=null) BracketsList.accept(visitor);
     }
 
     public void traverseTopDown(Visitor visitor) {
         accept(visitor);
-        if(AnotherVarList!=null) AnotherVarList.traverseTopDown(visitor);
+        if(RemainingVarsList!=null) RemainingVarsList.traverseTopDown(visitor);
         if(BracketsList!=null) BracketsList.traverseTopDown(visitor);
     }
 
     public void traverseBottomUp(Visitor visitor) {
-        if(AnotherVarList!=null) AnotherVarList.traverseBottomUp(visitor);
+        if(RemainingVarsList!=null) RemainingVarsList.traverseBottomUp(visitor);
         if(BracketsList!=null) BracketsList.traverseBottomUp(visitor);
         accept(visitor);
     }
@@ -67,15 +67,15 @@ public class AnotherVars extends AnotherVarList {
     public String toString(String tab) {
         StringBuffer buffer=new StringBuffer();
         buffer.append(tab);
-        buffer.append("AnotherVars(\n");
+        buffer.append("RemainingVars(\n");
 
-        if(AnotherVarList!=null)
-            buffer.append(AnotherVarList.toString("  "+tab));
+        if(RemainingVarsList!=null)
+            buffer.append(RemainingVarsList.toString("  "+tab));
         else
             buffer.append(tab+"  null");
         buffer.append("\n");
 
-        buffer.append(" "+tab+anotherVar);
+        buffer.append(" "+tab+remainingVar);
         buffer.append("\n");
 
         if(BracketsList!=null)
@@ -85,7 +85,7 @@ public class AnotherVars extends AnotherVarList {
         buffer.append("\n");
 
         buffer.append(tab);
-        buffer.append(") [AnotherVars]");
+        buffer.append(") [RemainingVars]");
         return buffer.toString();
     }
 }

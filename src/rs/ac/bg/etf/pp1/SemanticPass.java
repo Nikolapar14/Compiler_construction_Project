@@ -45,6 +45,8 @@ public class SemanticPass extends VisitorAdaptor {
 	Struct lastType;
 	int constValue = 0;
 	
+	boolean isArray = false;
+	
 	Logger log = Logger.getLogger(getClass());
 	
 	
@@ -114,7 +116,7 @@ public class SemanticPass extends VisitorAdaptor {
 		
 	}
 	
-	//CONST
+	//CONST DECLARATION
 	
 	@Override
 	public void visit(NumberConst numberConst) {
@@ -191,6 +193,67 @@ public class SemanticPass extends VisitorAdaptor {
 		}
 		
 	}
+	
+	//VAR DECLARATION
+	
+	public void visit(FirstVar firstVar) {
+		
+		//check if variable is already declared
+		if(Tab.find(firstVar.getVarName()) != Tab.noObj) {
+			report_error("Variable " + firstVar.getVarName() + " is already declared!", firstVar);
+		}else {
+			
+			if(isArray) {
+				Struct arr = new Struct(Struct.Array,lastType);
+				Tab.insert(Obj.Var, firstVar.getVarName(), arr);
+				
+				report_info("Declared array: " + firstVar.getVarName(), firstVar);
+				
+				isArray = false;
+			}else {
+				report_info("Declared variable: " + firstVar.getVarName(), firstVar);
+				Tab.insert(Obj.Var, firstVar.getVarName(), lastType);
+			}
+			
+			
+		}
+		
+		
+	}
+	
+	
+	
+	public void visit(Brackets brackets) {
+		isArray = true;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

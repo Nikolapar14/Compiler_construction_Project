@@ -1,6 +1,6 @@
 // generated with ast extension for cup
 // version 0.8
-// 5/9/2025 13:26:36
+// 5/9/2025 17:42:57
 
 
 package rs.ac.bg.etf.pp1.ast;
@@ -10,13 +10,13 @@ public class VarDecl implements SyntaxNode {
     private SyntaxNode parent;
     private int line;
     private FirstVar FirstVar;
-    private AnotherVarList AnotherVarList;
+    private RemainingVarsList RemainingVarsList;
 
-    public VarDecl (FirstVar FirstVar, AnotherVarList AnotherVarList) {
+    public VarDecl (FirstVar FirstVar, RemainingVarsList RemainingVarsList) {
         this.FirstVar=FirstVar;
         if(FirstVar!=null) FirstVar.setParent(this);
-        this.AnotherVarList=AnotherVarList;
-        if(AnotherVarList!=null) AnotherVarList.setParent(this);
+        this.RemainingVarsList=RemainingVarsList;
+        if(RemainingVarsList!=null) RemainingVarsList.setParent(this);
     }
 
     public FirstVar getFirstVar() {
@@ -27,12 +27,12 @@ public class VarDecl implements SyntaxNode {
         this.FirstVar=FirstVar;
     }
 
-    public AnotherVarList getAnotherVarList() {
-        return AnotherVarList;
+    public RemainingVarsList getRemainingVarsList() {
+        return RemainingVarsList;
     }
 
-    public void setAnotherVarList(AnotherVarList AnotherVarList) {
-        this.AnotherVarList=AnotherVarList;
+    public void setRemainingVarsList(RemainingVarsList RemainingVarsList) {
+        this.RemainingVarsList=RemainingVarsList;
     }
 
     public SyntaxNode getParent() {
@@ -57,18 +57,18 @@ public class VarDecl implements SyntaxNode {
 
     public void childrenAccept(Visitor visitor) {
         if(FirstVar!=null) FirstVar.accept(visitor);
-        if(AnotherVarList!=null) AnotherVarList.accept(visitor);
+        if(RemainingVarsList!=null) RemainingVarsList.accept(visitor);
     }
 
     public void traverseTopDown(Visitor visitor) {
         accept(visitor);
         if(FirstVar!=null) FirstVar.traverseTopDown(visitor);
-        if(AnotherVarList!=null) AnotherVarList.traverseTopDown(visitor);
+        if(RemainingVarsList!=null) RemainingVarsList.traverseTopDown(visitor);
     }
 
     public void traverseBottomUp(Visitor visitor) {
         if(FirstVar!=null) FirstVar.traverseBottomUp(visitor);
-        if(AnotherVarList!=null) AnotherVarList.traverseBottomUp(visitor);
+        if(RemainingVarsList!=null) RemainingVarsList.traverseBottomUp(visitor);
         accept(visitor);
     }
 
@@ -83,8 +83,8 @@ public class VarDecl implements SyntaxNode {
             buffer.append(tab+"  null");
         buffer.append("\n");
 
-        if(AnotherVarList!=null)
-            buffer.append(AnotherVarList.toString("  "+tab));
+        if(RemainingVarsList!=null)
+            buffer.append(RemainingVarsList.toString("  "+tab));
         else
             buffer.append(tab+"  null");
         buffer.append("\n");

@@ -67,7 +67,7 @@ nonterminal ConstDecl ConstDecl;
 nonterminal  RemainingConstsList RemainingConstsList;
 nonterminal VarDecl VarDecl;
 nonterminal BracketsList BracketsList;
-nonterminal AnotherVarList AnotherVarList;  
+nonterminal RemainingVarsList RemainingVarsList;  
 
 nonterminal  MethodTypeList MethodTypeList;
 nonterminal FormParsList FormParsList;
@@ -140,7 +140,7 @@ RemainingConstsList ::= (RemainingConsts) RemainingConstsList:R1 COMMA IDENT:con
 					;
 					
 
-VarDecl ::= (VarDecl) FirstVar:first AnotherVarList:A1 SEMI {: RESULT=new VarDecl(first, A1); RESULT.setLine(firstleft); :};
+VarDecl ::= (VarDecl) FirstVar:first RemainingVarsList:R1 SEMI {: RESULT=new VarDecl(first, R1); RESULT.setLine(firstleft); :};
 
 FirstVar ::= (FirstVar) Type:varType IDENT:varName BracketsList:B1 {: RESULT=new FirstVar(varType, varName, B1); RESULT.setLine(varTypeleft); :};
 
@@ -150,9 +150,9 @@ BracketsList ::= (Brackets) LBRACKET RBRACKET {: RESULT=new Brackets(); :}
 				;
 
 
-AnotherVarList ::= (AnotherVars) AnotherVarList:A1 COMMA IDENT:anotherVar BracketsList:B2 {: RESULT=new AnotherVars(A1, anotherVar, B2); RESULT.setLine(A1left); :}
+RemainingVarsList ::= (RemainingVars) RemainingVarsList:R1 COMMA IDENT:remainingVar BracketsList:B2 {: RESULT=new RemainingVars(R1, remainingVar, B2); RESULT.setLine(R1left); :}
 				|
-				(NoAnotherVars) {: RESULT=new NoAnotherVars(); :} /* epsilon */
+				(NoRemainingVars) {: RESULT=new NoRemainingVars(); :} /* epsilon */
 				;
 				
 MethodSignature ::= (MethodSignature) MethodTypeList:M1 IDENT:methName LPAREN FormParsList:F2 RPAREN {: RESULT=new MethodSignature(M1, methName, F2); RESULT.setLine(M1left); :};
