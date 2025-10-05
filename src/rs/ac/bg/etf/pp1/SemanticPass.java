@@ -4,7 +4,8 @@ import org.apache.log4j.Logger;
 
 import rs.ac.bg.etf.pp1.ast.SyntaxNode;
 import rs.ac.bg.etf.pp1.ast.VisitorAdaptor;
-
+import rs.etf.pp1.symboltable.Tab;
+import rs.etf.pp1.symboltable.concepts.Obj;
 import rs.ac.bg.etf.pp1.ast.*;
 
 public class SemanticPass extends VisitorAdaptor {
@@ -45,6 +46,17 @@ public class SemanticPass extends VisitorAdaptor {
 	@Override
 	public void visit(Program program) {
 		report_info("Hello program", program);
+		
+		Tab.chainLocalSymbols(program.getProgName().obj);
+		
+		
+		
+	}
+	
+	@Override
+	public void visit(ProgName progName) {
+		progName.obj = Tab.insert(Obj.Prog, progName.getProgName(), Tab.noType);
+		Tab.openScope();
 	}
 	
 }
