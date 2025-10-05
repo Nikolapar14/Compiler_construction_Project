@@ -1,5 +1,7 @@
 package rs.ac.bg.etf.pp1;
 
+import java.util.HashMap;
+
 import org.apache.log4j.Logger;
 
 import rs.etf.pp1.symboltable.Tab;
@@ -9,10 +11,33 @@ import rs.ac.bg.etf.pp1.ast.*;
 
 public class SemanticPass extends VisitorAdaptor {
 	
+	public SemanticPass(){
+		initMap();
+	}
+	
+	private void initMap() {
+		this.typeMap.put(0, "void");
+		this.typeMap.put(1, "int");
+		this.typeMap.put(2, "char");
+		this.typeMap.put(3, "array");
+		this.typeMap.put(4, "class");
+		this.typeMap.put(5, "bool");
+		this.typeMap.put(6, "enum");
+		this.typeMap.put(7, "interface");
+		this.typeMap.put(8, "bool");
+	}
+	
+	private String getFullTypeName(int id) {
+		return typeMap.get(id);
+	}
+	
 	public static final int Set = 8;
 	
 	public static final Struct setType = new Struct(Set);
 	public static final Struct boolType = new Struct(Struct.Bool);
+	
+	HashMap<Integer, String> typeMap = new HashMap<>();
+	
 	
 	boolean errorDetected = false;
 	
@@ -137,12 +162,36 @@ public class SemanticPass extends VisitorAdaptor {
 				constant.setAdr(constValue);
 				report_info("Constant " + firstConst.getConstName() + " successfully declared!",firstConst);
 			}else {
-				report_error("Type: " + firstConst.getConstValueList().struct.getKind() + " is not assignable to type " + lastType.getKind() + "!",firstConst);
+				report_error("Type: " + getFullTypeName(firstConst.getConstValueList().struct.getKind()) + " is not assignable to type " + getFullTypeName(lastType.getKind()) + "!",firstConst);
 			}
 			
 		}
 		
 		
 	}
+	
+	public void visit(RemainingConsts constant) {
+		
+		//check if const is already declared
+		if(Tab.find(constant.getConstName()) != Tab.noObj) {
+			report_error("Constant " + constant.getConstName() + " is already declared!", constant);
+		}else {
+			//check if variable and value are compatibile
+			if(constant.getConstValueList().struct.assignableTo(lastType)) {
+				
+				Obj constantNew = Tab.insert(Obj.Con, constant.getConstName(), lastType);
+				constantNew.setAdr(constValue);
+				report_info("Constant " + constant.getConstName() + " successfully declared!",constant);
+				
+				
+			}else {
+				report_error("Type: " + getFullTypeName(constant.getConstValueList().struct.getKind()) + " is not assignable to type " + getFullTypeName(lastType.getKind()) + "!",constant);
+			}
+			
+		}
+		
+	}
+	
+	
 	
 }

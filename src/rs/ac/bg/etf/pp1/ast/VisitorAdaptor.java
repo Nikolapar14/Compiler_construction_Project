@@ -1,6 +1,6 @@
 // generated with ast extension for cup
 // version 0.8
-// 4/9/2025 12:48:14
+// 5/9/2025 13:26:36
 
 
 package rs.ac.bg.etf.pp1.ast;
@@ -11,7 +11,6 @@ public abstract class VisitorAdaptor implements Visitor {
     public void visit(AndCondList AndCondList) { }
     public void visit(Relop Relop) { }
     public void visit(OrCondList OrCondList) { }
-    public void visit(AnotherConstList AnotherConstList) { }
     public void visit(StatementList StatementList) { }
     public void visit(Addop Addop) { }
     public void visit(Factor Factor) { }
@@ -27,6 +26,7 @@ public abstract class VisitorAdaptor implements Visitor {
     public void visit(DesignatorStatement DesignatorStatement) { }
     public void visit(ActualPars ActualPars) { }
     public void visit(ConstValueList ConstValueList) { }
+    public void visit(RemainingConstsList RemainingConstsList) { }
     public void visit(Express Express) { }
     public void visit(Statement Statement) { }
     public void visit(AnotherExprList AnotherExprList) { }
@@ -121,8 +121,8 @@ public abstract class VisitorAdaptor implements Visitor {
     public void visit(Brackets Brackets) { visit(); }
     public void visit(FirstVar FirstVar) { visit(); }
     public void visit(VarDecl VarDecl) { visit(); }
-    public void visit(NoAnotherConst NoAnotherConst) { visit(); }
-    public void visit(AnotherConsts AnotherConsts) { visit(); }
+    public void visit(NoRemainingConsts NoRemainingConsts) { visit(); }
+    public void visit(RemainingConsts RemainingConsts) { visit(); }
     public void visit(BoolFalse BoolFalse) { visit(); }
     public void visit(BoolTrue BoolTrue) { visit(); }
     public void visit(CharConst CharConst) { visit(); }

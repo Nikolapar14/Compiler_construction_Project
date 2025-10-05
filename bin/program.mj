@@ -1,5 +1,6 @@
 program MJProgram
-	const char x = 10;
+	const char x = 'c', y = 'b', y = 'd';
+	const int t = false;
 {
 	void main() {
 		

@@ -1,6 +1,6 @@
 // generated with ast extension for cup
 // version 0.8
-// 4/9/2025 12:48:13
+// 5/9/2025 13:26:36
 
 
 package rs.ac.bg.etf.pp1.ast;
@@ -10,13 +10,13 @@ public class ConstDecl implements SyntaxNode {
     private SyntaxNode parent;
     private int line;
     private FirstConst FirstConst;
-    private AnotherConstList AnotherConstList;
+    private RemainingConstsList RemainingConstsList;
 
-    public ConstDecl (FirstConst FirstConst, AnotherConstList AnotherConstList) {
+    public ConstDecl (FirstConst FirstConst, RemainingConstsList RemainingConstsList) {
         this.FirstConst=FirstConst;
         if(FirstConst!=null) FirstConst.setParent(this);
-        this.AnotherConstList=AnotherConstList;
-        if(AnotherConstList!=null) AnotherConstList.setParent(this);
+        this.RemainingConstsList=RemainingConstsList;
+        if(RemainingConstsList!=null) RemainingConstsList.setParent(this);
     }
 
     public FirstConst getFirstConst() {
@@ -27,12 +27,12 @@ public class ConstDecl implements SyntaxNode {
         this.FirstConst=FirstConst;
     }
 
-    public AnotherConstList getAnotherConstList() {
-        return AnotherConstList;
+    public RemainingConstsList getRemainingConstsList() {
+        return RemainingConstsList;
     }
 
-    public void setAnotherConstList(AnotherConstList AnotherConstList) {
-        this.AnotherConstList=AnotherConstList;
+    public void setRemainingConstsList(RemainingConstsList RemainingConstsList) {
+        this.RemainingConstsList=RemainingConstsList;
     }
 
     public SyntaxNode getParent() {
@@ -57,18 +57,18 @@ public class ConstDecl implements SyntaxNode {
 
     public void childrenAccept(Visitor visitor) {
         if(FirstConst!=null) FirstConst.accept(visitor);
-        if(AnotherConstList!=null) AnotherConstList.accept(visitor);
+        if(RemainingConstsList!=null) RemainingConstsList.accept(visitor);
     }
 
     public void traverseTopDown(Visitor visitor) {
         accept(visitor);
         if(FirstConst!=null) FirstConst.traverseTopDown(visitor);
-        if(AnotherConstList!=null) AnotherConstList.traverseTopDown(visitor);
+        if(RemainingConstsList!=null) RemainingConstsList.traverseTopDown(visitor);
     }
 
     public void traverseBottomUp(Visitor visitor) {
         if(FirstConst!=null) FirstConst.traverseBottomUp(visitor);
-        if(AnotherConstList!=null) AnotherConstList.traverseBottomUp(visitor);
+        if(RemainingConstsList!=null) RemainingConstsList.traverseBottomUp(visitor);
         accept(visitor);
     }
 
@@ -83,8 +83,8 @@ public class ConstDecl implements SyntaxNode {
             buffer.append(tab+"  null");
         buffer.append("\n");
 
-        if(AnotherConstList!=null)
-            buffer.append(AnotherConstList.toString("  "+tab));
+        if(RemainingConstsList!=null)
+            buffer.append(RemainingConstsList.toString("  "+tab));
         else
             buffer.append(tab+"  null");
         buffer.append("\n");

@@ -64,7 +64,7 @@ terminal Character CHAR_CONST;
 nonterminal  VarDeclList VarDeclList;
 nonterminal MethodDeclList MethodDeclList;
 nonterminal ConstDecl ConstDecl;  
-nonterminal  AnotherConstList AnotherConstList;
+nonterminal  RemainingConstsList RemainingConstsList;
 nonterminal VarDecl VarDecl;
 nonterminal BracketsList BracketsList;
 nonterminal AnotherVarList AnotherVarList;  
@@ -121,7 +121,7 @@ MethodDeclList ::= (Methods) MethodDeclList:M1 MethodDecl:M2 {: RESULT=new Metho
 				;
 		
 		
-ConstDecl ::= (ConstDecl) FirstConst:first  AnotherConstList:A1 SEMI {: RESULT=new ConstDecl(first, A1); RESULT.setLine(firstleft); :};
+ConstDecl ::= (ConstDecl) FirstConst:first  RemainingConstsList:R1 SEMI {: RESULT=new ConstDecl(first, R1); RESULT.setLine(firstleft); :};
 
 FirstConst ::= (FirstConst) CONST Type:constType IDENT:constName EQUAL_SIGN ConstValueList:constValue {: RESULT=new FirstConst(constType, constName, constValue); RESULT.setLine(constTypeleft); :};
 
@@ -134,9 +134,9 @@ ConstValueList ::= (NumberConst) NUMBER_CONST:N1 {: RESULT=new NumberConst(N1); 
 				(BoolFalse) FALSE {: RESULT=new BoolFalse(); :}
 				;
 				
-AnotherConstList ::= (AnotherConsts) AnotherConstList:A1 COMMA IDENT:constName EQUAL_SIGN ConstValueList:C2 {: RESULT=new AnotherConsts(A1, constName, C2); RESULT.setLine(A1left); :}
+RemainingConstsList ::= (RemainingConsts) RemainingConstsList:R1 COMMA IDENT:constName EQUAL_SIGN ConstValueList:C2 {: RESULT=new RemainingConsts(R1, constName, C2); RESULT.setLine(R1left); :}
 					|
-					(NoAnotherConst) {: RESULT=new NoAnotherConst(); :} /* epsilon */
+					(NoRemainingConsts) {: RESULT=new NoRemainingConsts(); :} /* epsilon */
 					;
 					
 

@@ -62,7 +62,7 @@ terminal String IDENT;
 terminal Character CHAR_CONST;
 
 nonterminal  VarDeclList, MethodDeclList, ConstDecl;  
-nonterminal  AnotherConstList, VarDecl, BracketsList, AnotherVarList;  
+nonterminal  RemainingConstsList, VarDecl, BracketsList, AnotherVarList;  
 
 nonterminal  MethodTypeList, FormParsList, VarDeclarationList;  
 nonterminal StatementList, FormPars, AnotherFormParamList, Statement;  
@@ -97,7 +97,7 @@ MethodDeclList ::= (Methods) MethodDeclList MethodDecl
 				;
 		
 		
-ConstDecl ::= (ConstDecl) FirstConst:first  AnotherConstList SEMI;
+ConstDecl ::= (ConstDecl) FirstConst:first  RemainingConstsList SEMI;
 
 FirstConst ::= (FirstConst) CONST Type:constType IDENT:constName EQUAL_SIGN ConstValueList:constValue;
 
@@ -110,9 +110,9 @@ ConstValueList ::= (NumberConst) NUMBER_CONST
 				(BoolFalse) FALSE
 				;
 				
-AnotherConstList ::= (AnotherConsts) AnotherConstList COMMA IDENT:constName EQUAL_SIGN ConstValueList
+RemainingConstsList ::= (RemainingConsts) RemainingConstsList COMMA IDENT:constName EQUAL_SIGN ConstValueList
 					|
-					(NoAnotherConst) /* epsilon */
+					(NoRemainingConsts) /* epsilon */
 					;
 					
 

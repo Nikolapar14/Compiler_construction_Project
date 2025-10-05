@@ -1,13 +1,13 @@
 // generated with ast extension for cup
 // version 0.8
-// 4/9/2025 12:48:13
+// 5/9/2025 13:26:36
 
 
 package rs.ac.bg.etf.pp1.ast;
 
-public class NoAnotherConst extends AnotherConstList {
+public class NoRemainingConsts extends RemainingConstsList {
 
-    public NoAnotherConst () {
+    public NoRemainingConsts () {
     }
 
     public void accept(Visitor visitor) {
@@ -28,10 +28,10 @@ public class NoAnotherConst extends AnotherConstList {
     public String toString(String tab) {
         StringBuffer buffer=new StringBuffer();
         buffer.append(tab);
-        buffer.append("NoAnotherConst(\n");
+        buffer.append("NoRemainingConsts(\n");
 
         buffer.append(tab);
-        buffer.append(") [NoAnotherConst]");
+        buffer.append(") [NoRemainingConsts]");
         return buffer.toString();
     }
 }

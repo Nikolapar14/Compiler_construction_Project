@@ -1,30 +1,30 @@
 // generated with ast extension for cup
 // version 0.8
-// 4/9/2025 12:48:13
+// 5/9/2025 13:26:36
 
 
 package rs.ac.bg.etf.pp1.ast;
 
-public class AnotherConsts extends AnotherConstList {
+public class RemainingConsts extends RemainingConstsList {
 
-    private AnotherConstList AnotherConstList;
+    private RemainingConstsList RemainingConstsList;
     private String constName;
     private ConstValueList ConstValueList;
 
-    public AnotherConsts (AnotherConstList AnotherConstList, String constName, ConstValueList ConstValueList) {
-        this.AnotherConstList=AnotherConstList;
-        if(AnotherConstList!=null) AnotherConstList.setParent(this);
+    public RemainingConsts (RemainingConstsList RemainingConstsList, String constName, ConstValueList ConstValueList) {
+        this.RemainingConstsList=RemainingConstsList;
+        if(RemainingConstsList!=null) RemainingConstsList.setParent(this);
         this.constName=constName;
         this.ConstValueList=ConstValueList;
         if(ConstValueList!=null) ConstValueList.setParent(this);
     }
 
-    public AnotherConstList getAnotherConstList() {
-        return AnotherConstList;
+    public RemainingConstsList getRemainingConstsList() {
+        return RemainingConstsList;
     }
 
-    public void setAnotherConstList(AnotherConstList AnotherConstList) {
-        this.AnotherConstList=AnotherConstList;
+    public void setRemainingConstsList(RemainingConstsList RemainingConstsList) {
+        this.RemainingConstsList=RemainingConstsList;
     }
 
     public String getConstName() {
@@ -48,18 +48,18 @@ public class AnotherConsts extends AnotherConstList {
     }
 
     public void childrenAccept(Visitor visitor) {
-        if(AnotherConstList!=null) AnotherConstList.accept(visitor);
+        if(RemainingConstsList!=null) RemainingConstsList.accept(visitor);
         if(ConstValueList!=null) ConstValueList.accept(visitor);
     }
 
     public void traverseTopDown(Visitor visitor) {
         accept(visitor);
-        if(AnotherConstList!=null) AnotherConstList.traverseTopDown(visitor);
+        if(RemainingConstsList!=null) RemainingConstsList.traverseTopDown(visitor);
         if(ConstValueList!=null) ConstValueList.traverseTopDown(visitor);
     }
 
     public void traverseBottomUp(Visitor visitor) {
-        if(AnotherConstList!=null) AnotherConstList.traverseBottomUp(visitor);
+        if(RemainingConstsList!=null) RemainingConstsList.traverseBottomUp(visitor);
         if(ConstValueList!=null) ConstValueList.traverseBottomUp(visitor);
         accept(visitor);
     }
@@ -67,10 +67,10 @@ public class AnotherConsts extends AnotherConstList {
     public String toString(String tab) {
         StringBuffer buffer=new StringBuffer();
         buffer.append(tab);
-        buffer.append("AnotherConsts(\n");
+        buffer.append("RemainingConsts(\n");
 
-        if(AnotherConstList!=null)
-            buffer.append(AnotherConstList.toString("  "+tab));
+        if(RemainingConstsList!=null)
+            buffer.append(RemainingConstsList.toString("  "+tab));
         else
             buffer.append(tab+"  null");
         buffer.append("\n");
@@ -85,7 +85,7 @@ public class AnotherConsts extends AnotherConstList {
         buffer.append("\n");
 
         buffer.append(tab);
-        buffer.append(") [AnotherConsts]");
+        buffer.append(") [RemainingConsts]");
         return buffer.toString();
     }
 }
