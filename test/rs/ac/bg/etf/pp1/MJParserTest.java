@@ -16,6 +16,8 @@ import rs.ac.bg.etf.pp1.ast.Program;
 import rs.ac.bg.etf.pp1.util.Log4JUtils;
 
 import rs.etf.pp1.symboltable.Tab;
+import rs.etf.pp1.symboltable.concepts.Obj;
+import rs.etf.pp1.symboltable.concepts.Struct;
 
 public class MJParserTest {
 
@@ -24,7 +26,14 @@ public class MJParserTest {
 		Log4JUtils.instance().prepareLogFile(Logger.getRootLogger());
 	}
 	
+	public static final int Set = 8;
+	
+	public static final Struct setType = new Struct(Set);
+	public static final Struct boolType = new Struct(Struct.Bool);
+	
 	public static void main(String[] args) throws Exception {
+		
+		
 		
 		Logger log = Logger.getLogger(MJParserTest.class);
 		
@@ -42,7 +51,43 @@ public class MJParserTest {
 	        Program prog = (Program)(s.value);
 	        
 	        //Tabela simbola - inicijalizacija
+	        
 	        Tab.init();
+	        
+	        Obj set = Tab.insert(Obj.Type, "set", setType);
+			set.setAdr(-1);
+			set.setLevel(-1);
+			Obj bool = Tab.insert(Obj.Type, "bool", boolType);
+			bool.setLevel(-1);
+			bool.setAdr(-1);
+			
+			//dodamo metodu add
+			Obj add = Tab.insert(Obj.Meth,"add",Tab.noType);
+			add.setLevel(2);
+			Tab.openScope();
+			Obj a = Tab.insert(Obj.Var,"a",setType);
+			a.setAdr(0);
+			a.setLevel(1);
+			Obj b= Tab.insert(Obj.Var, "b", Tab.intType);
+			b.setAdr(1);
+			b.setLevel(1);
+			Tab.chainLocalSymbols(add);
+			Tab.closeScope();
+			
+			//dodamo metodu addAll
+			Obj addAll = Tab.insert(Obj.Meth, "addAll", Tab.noType);
+			addAll.setLevel(2);
+			Tab.openScope();
+			a = Tab.insert(Obj.Var, "a",  setType);
+			a.setAdr(0);
+			a.setLevel(1);
+			b = Tab.insert(Obj.Var, "b", new Struct(Struct.Array,Tab.intType));
+			b.setAdr(1);
+			b.setLevel(1);
+			Tab.chainLocalSymbols(addAll);
+			Tab.closeScope();
+	        
+	        
 	        
 			// ispis sintaksnog stabla
 			log.info(prog.toString(""));
