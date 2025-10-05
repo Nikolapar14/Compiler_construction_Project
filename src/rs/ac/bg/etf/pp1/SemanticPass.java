@@ -50,13 +50,34 @@ public class SemanticPass extends VisitorAdaptor {
 		Tab.chainLocalSymbols(program.getProgName().obj);
 		
 		
-		
 	}
 	
 	@Override
 	public void visit(ProgName progName) {
 		progName.obj = Tab.insert(Obj.Prog, progName.getProgName(), Tab.noType);
 		Tab.openScope();
+	}
+	
+	@Override
+	public void visit(Type type) {
+		
+		Obj node;
+		node = Tab.find(type.getTypeName());
+		//check if specified type exists in symbol table
+		if( node == Tab.noObj) {
+			report_error("Specified type " + type.getTypeName() + " doesn't exist in symbol table!", type);
+			type.struct = Tab.noType;
+		}else {
+			//if type is predefined, check if the object node actually represents a type
+			if(node.getKind() != Obj.Type) {
+				report_error(type.getTypeName() + " doesn't represent a type!",type);
+				type.struct = Tab.noType;
+			}else {
+				type.struct = node.getType();
+			}
+		}
+		
+		
 	}
 	
 }
