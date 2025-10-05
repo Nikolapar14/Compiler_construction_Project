@@ -15,6 +15,8 @@ import org.apache.log4j.xml.DOMConfigurator;
 import rs.ac.bg.etf.pp1.ast.Program;
 import rs.ac.bg.etf.pp1.util.Log4JUtils;
 
+import rs.etf.pp1.symboltable.Tab;
+
 public class MJParserTest {
 
 	static {
@@ -37,18 +39,31 @@ public class MJParserTest {
 			MJParser p = new MJParser(lexer);
 	        Symbol s = p.parse();  //pocetak parsiranja
 	        
-	        Program prog = (Program)(s.value); 
+	        Program prog = (Program)(s.value);
+	        
+	        //Tabela simbola - inicijalizacija
+	        Tab.init();
+	        
 			// ispis sintaksnog stabla
 			log.info(prog.toString(""));
 			log.info("===================================");
 
-			// ispis prepoznatih programskih konstrukcija
-			RuleVisitor v = new RuleVisitor();
-			prog.traverseBottomUp(v); 
+			// oblizak apstraktnog sintaksnog stabla
+			SemanticPass sem = new SemanticPass();
+			prog.traverseBottomUp(sem); 
+			
+			
+			//ispis tabele simbola
+			Tab.dump();
 	      
-			log.info(" Print count calls = " + v.printCallCount);
-
-			log.info(" Deklarisanih promenljivih ima = " + v.varDeclCount);
+			//log.info(" Print count calls = " + sem.printCallCount);
+			//log.info(" Deklarisanih promenljivih ima = " + v.varDeclCount);
+			
+			if(!sem.errorDetected && sem.passed()) {
+				log.info("Parsiranje uspesno zavrseno!");
+			}else {
+				log.error("Parsiranje NIJE uspesno zavrseno");
+			}
 			
 		} 
 		finally {
