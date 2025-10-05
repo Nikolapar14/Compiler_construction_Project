@@ -221,6 +221,29 @@ public class SemanticPass extends VisitorAdaptor {
 		
 	}
 	
+	public void visit(RemainingVars remaining) {
+		
+		//check if variable is already declared
+				if(Tab.find(remaining.getRemainingVar()) != Tab.noObj) {
+					report_error("Variable " + remaining.getRemainingVar() + " is already declared!", remaining);
+				}else {
+					
+					if(isArray) {
+						Struct arr = new Struct(Struct.Array,lastType);
+						Tab.insert(Obj.Var, remaining.getRemainingVar(), arr);
+						
+						report_info("Declared array: " + remaining.getRemainingVar(), remaining);
+						
+						isArray = false;
+					}else {
+						report_info("Declared variable: " + remaining.getRemainingVar(), remaining);
+						Tab.insert(Obj.Var, remaining.getRemainingVar(), lastType);
+					}
+					
+					
+				}
+		
+	}
 	
 	
 	public void visit(Brackets brackets) {

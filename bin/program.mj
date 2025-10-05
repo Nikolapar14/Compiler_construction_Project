@@ -1,6 +1,9 @@
 program MJProgram
-	const char x = 'c', y = 'b', y = 'd';
-	const int t = false;
+	const char x = 'c', y = 'b';
+	const int t = 12;
+	
+	int x2[], test, test1[], test2;
+	bool ch;
 {
 	void main() {
 		
