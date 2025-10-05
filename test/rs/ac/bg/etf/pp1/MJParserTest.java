@@ -26,10 +26,7 @@ public class MJParserTest {
 		Log4JUtils.instance().prepareLogFile(Logger.getRootLogger());
 	}
 	
-	public static final int Set = 8;
 	
-	public static final Struct setType = new Struct(Set);
-	public static final Struct boolType = new Struct(Struct.Bool);
 	
 	public static void main(String[] args) throws Exception {
 		
@@ -54,10 +51,10 @@ public class MJParserTest {
 	        
 	        Tab.init();
 	        
-	        Obj set = Tab.insert(Obj.Type, "set", setType);
+	        Obj set = Tab.insert(Obj.Type, "set", SemanticPass.setType);
 			set.setAdr(-1);
 			set.setLevel(-1);
-			Obj bool = Tab.insert(Obj.Type, "bool", boolType);
+			Obj bool = Tab.insert(Obj.Type, "bool", SemanticPass.boolType);
 			bool.setLevel(-1);
 			bool.setAdr(-1);
 			
@@ -65,7 +62,7 @@ public class MJParserTest {
 			Obj add = Tab.insert(Obj.Meth,"add",Tab.noType);
 			add.setLevel(2);
 			Tab.openScope();
-			Obj a = Tab.insert(Obj.Var,"a",setType);
+			Obj a = Tab.insert(Obj.Var,"a",SemanticPass.setType);
 			a.setAdr(0);
 			a.setLevel(1);
 			Obj b= Tab.insert(Obj.Var, "b", Tab.intType);
@@ -78,7 +75,7 @@ public class MJParserTest {
 			Obj addAll = Tab.insert(Obj.Meth, "addAll", Tab.noType);
 			addAll.setLevel(2);
 			Tab.openScope();
-			a = Tab.insert(Obj.Var, "a",  setType);
+			a = Tab.insert(Obj.Var, "a",  SemanticPass.setType);
 			a.setAdr(0);
 			a.setLevel(1);
 			b = Tab.insert(Obj.Var, "b", new Struct(Struct.Array,Tab.intType));

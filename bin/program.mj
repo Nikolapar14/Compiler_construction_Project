@@ -1,5 +1,5 @@
 program MJProgram
-	int x, y;
+	const char x = 10;
 {
 	void main() {
 		

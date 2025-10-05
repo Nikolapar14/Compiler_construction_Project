@@ -2,15 +2,23 @@ package rs.ac.bg.etf.pp1;
 
 import org.apache.log4j.Logger;
 
-import rs.ac.bg.etf.pp1.ast.SyntaxNode;
-import rs.ac.bg.etf.pp1.ast.VisitorAdaptor;
 import rs.etf.pp1.symboltable.Tab;
 import rs.etf.pp1.symboltable.concepts.Obj;
+import rs.etf.pp1.symboltable.concepts.Struct;
 import rs.ac.bg.etf.pp1.ast.*;
 
 public class SemanticPass extends VisitorAdaptor {
 	
+	public static final int Set = 8;
+	
+	public static final Struct setType = new Struct(Set);
+	public static final Struct boolType = new Struct(Struct.Bool);
+	
 	boolean errorDetected = false;
+	
+	//saves last processed type, for easier fetching
+	Struct lastType;
+	int constValue = 0;
 	
 	Logger log = Logger.getLogger(getClass());
 	
@@ -75,6 +83,63 @@ public class SemanticPass extends VisitorAdaptor {
 			}else {
 				type.struct = node.getType();
 			}
+		}
+		
+		lastType = type.struct;
+		
+	}
+	
+	//CONST
+	
+	@Override
+	public void visit(NumberConst numberConst) {
+		
+		numberConst.struct = Tab.intType;
+		constValue = numberConst.getN1();
+		
+	}
+	
+	@Override
+	public void visit(CharConst charConst) {
+		
+		charConst.struct = Tab.charType;
+		constValue = charConst.getC1();
+	}
+	
+	@Override
+	public void visit(BoolTrue bt) {
+		
+		bt.struct = boolType;
+		constValue = 1;
+		
+	}
+	
+	@Override
+	public void visit(BoolFalse bt) {
+		
+		bt.struct = boolType;
+		constValue = 0;
+		
+	}
+	
+	public void visit(FirstConst firstConst) {
+		
+		
+		//check if const is already declared
+		if(Tab.find(firstConst.getConstName()) != Tab.noObj) {
+			report_error("Constant " + firstConst.getConstName() + " is already declared!", firstConst);
+		}else {
+			
+			//check if variable and value are compatibile
+			if(firstConst.getConstValueList().struct.assignableTo(firstConst.getType().struct)) {
+				
+				Obj constant = Tab.insert(Obj.Con, firstConst.getConstName(), lastType);
+				constant.setAdr(constValue);
+				report_info("Constant " + firstConst.getConstName() + " successfully declared!",firstConst);
+			}else {
+				report_error("Type: " + firstConst.getConstValueList().struct.getKind() + " is not assignable to type " + lastType.getKind() + "!",firstConst);
+			}
+			
 		}
 		
 		
