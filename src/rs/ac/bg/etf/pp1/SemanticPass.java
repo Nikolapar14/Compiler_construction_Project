@@ -40,6 +40,7 @@ public class SemanticPass extends VisitorAdaptor {
 	
 	
 	boolean errorDetected = false;
+	boolean returnFound = false;
 	
 	//saves last processed type, for easier fetching
 	Struct lastType;
@@ -249,6 +250,43 @@ public class SemanticPass extends VisitorAdaptor {
 	public void visit(Brackets brackets) {
 		isArray = true;
 	}
+	
+	
+	//METHODS
+	
+	public void visit(MethodSignature methodSignature) {
+		
+		Obj node = Tab.find(methodSignature.getMethName());
+		if( node != Tab.noObj) {
+			report_error("Method  " + methodSignature.getMethName() + " is already declared!",methodSignature);
+		}else {
+			Obj meth = Tab.insert(Obj.Meth, methodSignature.getMethName(), lastType);
+			methodSignature.obj = meth;
+			Tab.openScope();
+		}
+		
+	}
+	
+	public void visit(MethodDecl methodDecl) {
+		
+		returnFound = false;
+		
+		Tab.chainLocalSymbols(methodDecl.getMethodSignature().obj);
+		Tab.closeScope();
+	}
+	
+	public void visit(VoidMethod voidMethod) {
+		
+		lastType = Tab.noType;
+		
+	}
+	
+	public void visit(StatementReturn ret) {
+		
+		returnFound = true;
+		
+	}
+	
 	
 	
 	
