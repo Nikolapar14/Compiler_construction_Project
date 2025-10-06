@@ -47,6 +47,7 @@ public class SemanticPass extends VisitorAdaptor {
 	int constValue = 0;
 	
 	boolean isArray = false;
+	int nVars;
 	
 	Logger log = Logger.getLogger(getClass());
 	
@@ -79,11 +80,21 @@ public class SemanticPass extends VisitorAdaptor {
 	
 	//SEMANTIC PASS
 	
+	
 	@Override
 	public void visit(Program program) {
-		report_info("Hello program", program);
 		
-		Tab.chainLocalSymbols(program.getProgName().obj);
+		nVars = Tab.currentScope.getnVars();
+		Tab.chainLocalSymbols(program.getProgName().obj); //na spoljasnji score uvezuje sve globalne promenljive
+		
+		Obj main = Tab.find("main");
+		if(main == Tab.noObj) {
+			report_error("Metoda main nije deklarisana!", null);
+		}else {
+			report_info("Metoda main je deklarisana",null);
+		}
+		
+		Tab.closeScope();
 		
 		
 	}
@@ -286,6 +297,8 @@ public class SemanticPass extends VisitorAdaptor {
 		returnFound = true;
 		
 	}
+	
+	
 	
 	
 	
