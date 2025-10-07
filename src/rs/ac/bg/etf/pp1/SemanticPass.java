@@ -298,6 +298,82 @@ public class SemanticPass extends VisitorAdaptor {
 		
 	}
 	
+	//DESIGNATOR
+	
+	public void visit(DesignatorSingle designator) {
+		
+		
+		Obj des = Tab.find(designator.getName());
+		
+		//check if variable exists
+		if(des == Tab.noObj) {
+			report_error("Variable: " + designator.getName() + " is not declared!", designator);
+			designator.obj = Tab.noObj;
+		}else {
+			designator.obj = des;
+		}
+		
+	}
+	
+	public void visit(DesignatorArray designator) {
+		
+		Obj des = Tab.find(designator.getName());
+		
+		//check if variable exists
+		if(des == Tab.noObj) {
+			report_error("Array: " + designator.getName() + " is not declared!", designator);
+			designator.obj = Tab.noObj;
+		}else {
+			
+			
+			if(des.getType().getKind() != Struct.Array) {
+				report_error("Variable: " + designator.getName() + " does't represent an array!", designator);
+				designator.obj = Tab.noObj;
+			}else {
+				designator.obj = des;
+			}
+			
+		}
+		
+	}
+	
+	//FACTOR
+	
+	public void visit(FactorNumber factor) {
+		factor.struct = Tab.intType;
+	}
+	
+	public void visit(FactorChar factor) {
+		factor.struct = Tab.charType;
+	}
+	
+	public void visit(FactorFalse factor) {
+		factor.struct = boolType;
+	}
+	
+	public void visit(FactorTrue factor) {
+		factor.struct = boolType;
+	}
+	
+	public void visit(FactorDesignator factor) {
+	    
+		Obj test = factor.getDesignator().obj;
+		
+	    if(test != Tab.noObj) {
+	    	
+	    	factor.struct = test.getType();
+	    	
+	    }else {
+	    	factor.struct = Tab.noType;
+	    }
+	    
+		
+	    
+	}
+	
+	
+	
+	
 	
 	
 	
