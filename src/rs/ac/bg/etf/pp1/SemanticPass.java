@@ -371,6 +371,42 @@ public class SemanticPass extends VisitorAdaptor {
 	    
 	}
 	
+	public void visit(FactorDesignatorFunc factor) {
+		
+		Obj des = factor.getDesignator().obj;
+		
+		factor.struct = des.getType();
+		
+		if(des == Tab.noObj) {
+			report_error("Error! Method " + des.getName() + " isn't declared!",factor);
+		}
+		
+	}
+	
+	//TERM
+	
+	public void visit(TermFactor term) {
+		term.struct = term.getFactor().struct;
+	}
+	
+	public void visit(TermList term) {
+		
+		term.struct = Tab.intType;
+		
+		if(term.getTerm().struct.getKind() == Struct.Array || term.getFactor().struct.getKind() == Struct.Array) {
+			report_error("An array can't be multiplied",term);
+			term.struct = Tab.noType;
+		}else {
+			
+			if(term.getTerm().struct != Tab.intType || term.getFactor().struct != Tab.intType) {
+				report_error("Only integers are allowed as multipliers",term);
+				term.struct = Tab.noType;
+			}
+			
+		}
+		
+	}
+	
 	
 	
 	
